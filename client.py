@@ -23,11 +23,18 @@ try:
     print('sending {!r}'.format(message))
     sock.sendall(message)
 
-    amount_received = 0
-    amount_expected = len(message)
+    full_msg = ''
 
-    data = sock.recv(512)
-    print('received {!r}'.format(data))
+    while True:
+        # Receive the data in small chunks and combine it
+        msg = sock.recv(16)     
+        full_msg = full_msg + msg.decode("utf-8")
+        if len(msg) < 16:
+            break
+
+    # print(full_msg)
+
+    print('received :', full_msg)
 
 finally:
     print('closing socket')
